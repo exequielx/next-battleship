@@ -12,7 +12,7 @@ export default function Lobby() {
         <Layout>
             <div>
                 <div>
-                    GAME
+                    tablero
                 </div>
                 <div>
                     players:
