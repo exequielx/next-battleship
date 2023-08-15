@@ -24,7 +24,7 @@ export default function Lobby() {
                 <div>
                     other players:
                     <ul>
-                        {game.users.map(r => <li>{r.name}</li>)}
+                        {game.users.map(r => <li key={r.id}>{r.name}</li>)}
                     </ul>
                 </div>
                 <button onClick={startGame}>Start Game</button>
