@@ -2,6 +2,11 @@ html,
 body {
   padding: 0;
   margin: 0;
+  height: 100vh;
+  width: 100%;
+  background: rgb(0,14,36);
+  background: linear-gradient(180deg, rgba(0,14,36,1) 4%, rgba(52,52,87,0.9822303921568627) 50%, rgba(0,0,0,1) 100%);
+  color: white;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
@@ -19,54 +24,4 @@ a {
 ======================================================
 */
 
-.dotsContainer {
-  width: 60px;
-  height: 25px;
-  background: #f2f2f2;
-  border-radius: 25px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-#dot1,
-#dot2,
-#dot3 {
-  width: 7px;
-  height: 7px;
-  background: #cacaca;
-  border-radius: 50%;
-  margin: 3px;
-  transition: all 0.5s ease-in-out;
-  animation: typing 1s infinite;
-}
-
-#dot1 {
-  animation-delay: 1s;
-}
-
-#dot2 {
-  animation-delay: 0.5s;
-}
-
-#dot3 {
-  animation-delay: 0.8s;
-}
-
-@keyframes typing {
-  0% {
-    transform: translateY(0);
-    transition: all 0.5s ease-in-out;
-  }
-
-  50% {
-    transform: translateY(-5px);
-    transition: all 0.5s ease-in-out;
-  }
-
-  100% {
-    transform: translateY(0);
-    transition: all 0.5s ease-in-out;
-  }
-}
 
