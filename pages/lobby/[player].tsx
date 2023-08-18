@@ -11,6 +11,12 @@ export default function Lobby() {
     const startGame = () => {
         router.push(`/game/${playerName}`);
     };
+    const rows = [
+        [1, 2, 3, 4],
+        [1, 11, 3, 4],
+        [1, 2, 33, 4],
+        [44, 2, 4, 4]
+    ]
 
     return (
         <Layout>
@@ -28,6 +34,16 @@ export default function Lobby() {
                     </ul>
                 </div>
                 <button onClick={startGame}>Start Game</button>
+
+                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                    {
+                        rows.map(row => <div style={{ display: 'flex' }}>
+                            {
+                                row.map(cell => <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', border: '.5px solid gray', width: 50, height: 50 }}>{cell}</div>)
+                            }
+                        </div>)
+                    }
+                </div>
             </div>
         </Layout>
     );
