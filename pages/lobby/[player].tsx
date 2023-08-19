@@ -23,7 +23,8 @@ export default function Lobby() {
         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    ]
+    ];
+    const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N'];
 
 
     const drawCell = (x: number, y: number) => {
@@ -56,11 +57,17 @@ export default function Lobby() {
                 <button onClick={startGame}>Start Game</button>
 
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <table style={{ borderCollapse: 'collapse', border: '1px solid white' }}>
+                    <table style={{borderSpacing: 0}}>
                         <tbody>
                             {
                                 board.map((r, x) => (
                                     <tr style={{ borderCollapse: 'collapse', border: '1px solid white' }}>
+                                        {
+                                            <td key={x} style={{ width: 50, height: 50 }} >
+                                                <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{letters[x]}</span>
+
+                                            </td>
+                                        }
                                         {
                                             r.map((c, y) => (
                                                 <td key={x + y} style={{ borderCollapse: 'collapse', border: '1px solid white', width: 50, height: 50 }} >
@@ -71,6 +78,16 @@ export default function Lobby() {
                                     </tr>
                                 ))
                             }
+                            <tr>
+                                <td></td>
+                                {
+                                    board[0].map((v, index) => (
+                                        <td key={index} style={{ width: 50, height: 50}}>
+                                            <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{index}</span>
+                                        </td>
+                                    ))
+                                }
+                            </tr>
                         </tbody>
                     </table>
                 </div>
