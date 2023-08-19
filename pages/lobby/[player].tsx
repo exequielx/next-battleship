@@ -3,6 +3,7 @@ import Layout from "@/components/layout";
 import useGame from "@/lib/useGame";
 import styles from '@/styles/lobby.module.css';
 import Board from "@/components/board";
+import { useEffect } from 'react';
 
 export default function Lobby() {
     const router = useRouter();
@@ -12,7 +13,7 @@ export default function Lobby() {
     const startGame = () => {
         router.push(`/game/${playerName}`);
     };
-   
+
     return (
         <Layout title="LOBBY">
             <div>
@@ -25,9 +26,11 @@ export default function Lobby() {
                         {game.users.map(r => <li key={r.id}>{r.name}</li>)}
                     </ul>
                 </div>
+                <button onClick={game.randomizeShips}>Random</button>
                 <button onClick={startGame}>Start Game</button>
 
                 <Board size={game.boardSize} ships={game.myShips} />
+
             </div>
         </Layout>
     );

@@ -6,7 +6,7 @@ import Board from "@/components/board";
 export default function Lobby() {
     const router = useRouter();
     const playerName = router?.query?.player;
-    const game = useGame(String(playerName));
+    const game = useGame(playerName);
 
     return (
         <Layout title="GAME">
