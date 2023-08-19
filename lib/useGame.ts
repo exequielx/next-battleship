@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
-import axios from "axios";
 import { User, Ship } from "./types";
 
 import {
@@ -8,14 +7,18 @@ import {
 } from './events';
 import { generateRandomShips } from "./game";
 
-export default function useGame(playerName: any) {
+export default function useGame(playerName: string) {
+  const boardSize = 10;
   const [users, setUsers] = useState<User[]>([]);
-  const [ships, setShips] = useState<Ship[]>(generateRandomShips());
+  const [myShips, setMyShips] = useState<Ship[]>();
+  const [ships, setShips] = useState<Ship[]>();
   const socketRef = useRef<any>();
 
   useEffect(() => {
     if (!playerName) { return; }
-   
+    setShips(generateRandomShips(8, boardSize - 1));
+    setMyShips(generateRandomShips(8, boardSize - 1));
+
     fetch('/api/socketio').finally(() => {
       socketRef.current = io({
         query: { name: playerName }
@@ -47,5 +50,7 @@ export default function useGame(playerName: any) {
   return {
     users,
     ships,
+    myShips,
+    boardSize,
   };
 }      

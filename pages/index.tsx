@@ -16,8 +16,8 @@ export default function Home() {
    };
 
    return (
-      <Layout>
-         <div className={styles.homeContainer}>
+      <Layout title="Login">
+         <div className={styles.container}>
             <h1 style={{ textAlign: 'center' }}>Batalla Naval</h1>
             <div>
                <input
