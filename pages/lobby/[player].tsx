@@ -12,20 +12,9 @@ export default function Lobby() {
     const startGame = () => {
         router.push(`/game/${playerName}`);
     };
-    const board = [
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    ];
+    const boardSize = 10;
+    const board = Array(boardSize).fill('').map(r => Array(boardSize).fill(''));
     const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N'];
-
 
     const drawCell = (x: number, y: number) => {
         let ret: any = '';
@@ -57,7 +46,7 @@ export default function Lobby() {
                 <button onClick={startGame}>Start Game</button>
 
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <table style={{borderSpacing: 0}}>
+                    <table style={{ borderSpacing: 0 }}>
                         <tbody>
                             {
                                 board.map((r, x) => (
@@ -82,7 +71,7 @@ export default function Lobby() {
                                 <td></td>
                                 {
                                     board[0].map((v, index) => (
-                                        <td key={index} style={{ width: 50, height: 50}}>
+                                        <td key={index} style={{ width: 50, height: 50 }}>
                                             <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{index}</span>
                                         </td>
                                     ))
