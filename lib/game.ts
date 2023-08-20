@@ -1,10 +1,35 @@
-import { Ship } from "./types";
+import { Data, Ship } from "./types";
 
-let myShips: Ship[];
+export const data: Data = {
+    users: [],
+    playing: false,
+    winner: false,
+};
 
-export const setMyShips = (ships: Ship[]) => {
-    myShips = ships;
+export const addUser = (id: string, username: string) => {
+    if (data && data.users.some(r => r.name === username)) {
+        data.users = data.users.map(r => {
+            if (r.name === username) { r.id = id; }
+            return r;
+        });
+    } else {
+        data.users.push({
+            id,
+            name: username,
+            ships: [],
+        });
+    }
 }
 
-export const getMyShips = () => myShips;
- 
+export const removeUser = (id: string) => {
+    data.users = data.users.filter(r => r.id !== id);
+}
+
+export const changeShips = (userId: string, ships: Ship[]) => {
+    data.users = data.users.map(r => {
+        if (userId === r.id) {
+            r.ships = ships;
+        }
+        return r;
+    });
+}

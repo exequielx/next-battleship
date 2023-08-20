@@ -1,50 +1,50 @@
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
-import { User, Ship } from "./types";
+import { Data } from "./types";
 
-import {
-  MYSHIPS_UPDATE_EVENT,
-  REFRESH_MYSHIPS_UPDATE_EVENT,
-  USERS_UPDATE_EVENT,
-} from './events';
+import { CHANGE_SHIPS_EVENT, UPDATE_DATA_EVENT } from './events';
 import { generateRandomShips } from "./helpers";
 
 export default function useGame(playerName: any) {
   const boardSize = 10;
-  const [users, setUsers] = useState<User[]>([]);
-  const [myShips, setMyShips] = useState<Ship[]>();
-  const [ships, setShips] = useState<Ship[]>();
+  const [data, setData] = useState<Data>();
   const socketRef = useRef<any>();
 
   const randomizeShips = () => {
     const ships = generateRandomShips(9, [1, 2, 3, 3, 4, 4, 5]);
-    sendEvent(MYSHIPS_UPDATE_EVENT, ships);
+    sendEvent(CHANGE_SHIPS_EVENT, ships);
   }
 
-  useEffect(() => {
-    if (!playerName) { return; }
+  const getMyShips = () => {
+    return data?.users?.find(r => r.id === socketRef.current.id)?.ships;
+  }
 
+  const addListeners = () => {
+    socketRef.current.on(UPDATE_DATA_EVENT, (_data: Data) => {
+      setData(_data);
+    });
+  };
+
+  const connectToSocket = () => {
     fetch('/api/socketio').finally(() => {
       socketRef.current = io({
         query: { name: playerName }
       });
 
-      // socketRef.current.on("connect", () => {
-      //   console.log(socketRef.current.id);
-      // });
-
-      socketRef.current.on(USERS_UPDATE_EVENT, (users: User[]) => {
-        setUsers(users);
+      socketRef.current.on("connect", () => {
+        console.log(`connected with id: ${socketRef.current.id}`);
       });
 
-      socketRef.current.on(REFRESH_MYSHIPS_UPDATE_EVENT, (ships: Ship[]) => {
-        setMyShips(ships);
-      });
+      addListeners();
 
       return () => {
         socketRef.current.disconnect();
       };
     });
+  };
+  useEffect(() => {
+    if (!playerName) { return; }
+    connectToSocket();
   }, [playerName]);
 
   const sendEvent = (type: string, value: any) => {
@@ -57,10 +57,9 @@ export default function useGame(playerName: any) {
   };
 
   return {
-    users,
-    ships,
-    myShips,
+    data,
     boardSize,
     randomizeShips,
+    getMyShips,
   };
 }      

@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 export default function Lobby() {
     const router = useRouter();
     const playerName = router?.query?.player;
-    const game = useGame(String(playerName));
+    const game = useGame(playerName);
 
     const startGame = () => {
         router.push(`/game/${playerName}`);
@@ -21,15 +21,19 @@ export default function Lobby() {
                     player: {playerName}
                 </div>
                 <div>
-                    other players:
+                    players:
                     <ul>
-                        {game.users.map(r => <li key={r.id}>{r.name}</li>)}
+                        {
+                            !game?.data ? <span>loading...</span> : (
+                                game.data.users.map(r => <li key={r.id}>{r.name}</li>)
+                            )
+                        }
                     </ul>
                 </div>
                 <button onClick={game.randomizeShips}>Random</button>
                 <button onClick={startGame}>Start Game</button>
 
-                <Board size={game.boardSize} ships={game.myShips} />
+                <Board size={game.boardSize} ships={game.getMyShips()} />
 
             </div>
         </Layout>

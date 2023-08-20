@@ -1,12 +1,7 @@
 import { Server } from 'socket.io';
-import { addUser, removeUser, getUsers } from '@/lib/users'
-import {
-  MYSHIPS_UPDATE_EVENT,
-  REFRESH_MYSHIPS_UPDATE_EVENT,
-  USERS_UPDATE_EVENT,
-} from '@/lib/events';
+import { CHANGE_SHIPS_EVENT, UPDATE_DATA_EVENT, } from '@/lib/events';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getMyShips, setMyShips } from '@/lib/game';
+import { addUser, changeShips, data, removeUser } from '@/lib/game';
 
 function ioHandler(req: NextApiRequest, res: NextApiResponse) {
   if (!(res.socket as any).server.io) {
@@ -18,31 +13,26 @@ function ioHandler(req: NextApiRequest, res: NextApiResponse) {
       console.log(`${socket.id} connected`);
       const { name } = socket.handshake.query;
 
-      const users = getUsers();
-      // si es nuevo user, lo agrega
-      if (!users.find(r => r.name === name)) {
-        addUser(socket.id, String(name));
-      }
-
-      io.emit(USERS_UPDATE_EVENT, users);
+      addUser(socket.id, String(name));
+      io.emit(UPDATE_DATA_EVENT, data);
 
       socket.on("disconnect", () => {
         removeUser(socket.id);
-        io.emit(USERS_UPDATE_EVENT, users);
+        console.log("removeUser", socket.id)
+        io.emit(UPDATE_DATA_EVENT, data);
       });
 
-      socket.on(MYSHIPS_UPDATE_EVENT, event => {
-        console.log('MYSHIPS_UPDATE_EVENT')
-        setMyShips(event.body);
-        socket.emit(REFRESH_MYSHIPS_UPDATE_EVENT, event.body);
+      socket.on(CHANGE_SHIPS_EVENT, event => {
+        console.log('CHANGE_SHIPS_EVENT');
+        changeShips(socket.id, event.body);
+        socket.emit(UPDATE_DATA_EVENT, data);
       });
     });
 
     (res.socket as any).server.io = io;
   } else {
     console.log('socket.io already running');
-    (res.socket as any).server.io.emit(USERS_UPDATE_EVENT, getUsers());
-    (res.socket as any).server.io.emit(REFRESH_MYSHIPS_UPDATE_EVENT, getMyShips());
+    (res.socket as any).server.io.emit(UPDATE_DATA_EVENT, data);
   }
   res.end();
 }

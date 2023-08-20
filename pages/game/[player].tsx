@@ -8,18 +8,23 @@ export default function Lobby() {
     const playerName = router?.query?.player;
     const game = useGame(playerName);
 
+
     return (
         <Layout title="GAME">
             <div>
                 <div>
                     players:
                     <ul>
-                        {game.users.map(r => <li key={r.id}>{r.name}</li>)}
+                        {
+                            !game?.data ? <span>loading...</span> : (
+                                game.data.users.map(r => <li key={r.id}>{r.name}</li>)
+                            )
+                        }
                     </ul>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Board cellSize={23} size={10} ships={game.ships} />
-                    <Board size={10} ships={game.myShips} />
+                    <Board cellSize={23} size={10} ships={game.getMyShips()} />
+                    <Board size={10} ships={[]} />
                 </div>
             </div>
         </Layout>
