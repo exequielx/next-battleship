@@ -1,3 +1,6 @@
+export const boardSize = 10;
+export const shipScheme = [1, 2, 3, 3, 4, 4, 5];
+
 export interface User {
     id: string;
     name: string;

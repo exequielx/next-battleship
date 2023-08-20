@@ -1,7 +1,7 @@
 import { Server } from 'socket.io';
 import { CHANGE_SHIPS_EVENT, UPDATE_DATA_EVENT, } from '@/lib/events';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { addUser, changeShips, data, removeUser } from '@/lib/game';
+import { updateUser, changeShips, data } from '@/lib/game';
 
 function ioHandler(req: NextApiRequest, res: NextApiResponse) {
   if (!(res.socket as any).server.io) {
@@ -10,15 +10,13 @@ function ioHandler(req: NextApiRequest, res: NextApiResponse) {
     const io = new Server((res.socket as any).server);
 
     io.on('connection', socket => {
-      console.log(`${socket.id} connected`);
       const { name } = socket.handshake.query;
+      updateUser(socket.id, String(name));
+      console.log(`${socket.id} connected`);
 
-      addUser(socket.id, String(name));
       io.emit(UPDATE_DATA_EVENT, data);
 
       socket.on("disconnect", () => {
-        removeUser(socket.id);
-        console.log("removeUser", socket.id)
         io.emit(UPDATE_DATA_EVENT, data);
       });
 

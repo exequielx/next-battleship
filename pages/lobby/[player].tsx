@@ -3,7 +3,6 @@ import Layout from "@/components/layout";
 import useGame from "@/lib/useGame";
 import styles from '@/styles/lobby.module.css';
 import Board from "@/components/board";
-import { useEffect } from 'react';
 
 export default function Lobby() {
     const router = useRouter();

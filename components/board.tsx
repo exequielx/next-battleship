@@ -25,7 +25,7 @@ export default function Board({ size, cellSize = 40, ships }: { size: number, ce
                 <tbody>
                     {
                         board.map((r, x) => (
-                            <tr style={{ borderCollapse: 'collapse', border: '1px solid white' }}>
+                            <tr key={x} style={{ borderCollapse: 'collapse', border: '1px solid white' }}>
                                 {
                                     <td key={x} style={{ width: cellSize, height: cellSize }} >
                                         <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{letters[x]}</span>

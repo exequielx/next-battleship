@@ -1,17 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
-import { Data } from "./types";
+import { Data, boardSize, shipScheme } from "./types";
 
 import { CHANGE_SHIPS_EVENT, UPDATE_DATA_EVENT } from './events';
 import { generateRandomShips } from "./helpers";
 
 export default function useGame(playerName: any) {
-  const boardSize = 10;
   const [data, setData] = useState<Data>();
   const socketRef = useRef<any>();
 
   const randomizeShips = () => {
-    const ships = generateRandomShips(9, [1, 2, 3, 3, 4, 4, 5]);
+    const ships = generateRandomShips(boardSize - 1, shipScheme);
     sendEvent(CHANGE_SHIPS_EVENT, ships);
   }
 

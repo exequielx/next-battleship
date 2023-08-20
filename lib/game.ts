@@ -1,4 +1,5 @@
-import { Data, Ship } from "./types";
+import { generateRandomShips } from "./helpers";
+import { Data, Ship, boardSize, shipScheme } from "./types";
 
 export const data: Data = {
     users: [],
@@ -6,7 +7,7 @@ export const data: Data = {
     winner: false,
 };
 
-export const addUser = (id: string, username: string) => {
+export const updateUser = async (id: string, username: string) => {
     if (data && data.users.some(r => r.name === username)) {
         data.users = data.users.map(r => {
             if (r.name === username) { r.id = id; }
@@ -16,7 +17,7 @@ export const addUser = (id: string, username: string) => {
         data.users.push({
             id,
             name: username,
-            ships: [],
+            ships: generateRandomShips(boardSize - 1, shipScheme),
         });
     }
 }
