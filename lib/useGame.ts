@@ -2,20 +2,32 @@ import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { Data, boardSize, shipScheme } from "./types";
 
-import { CHANGE_SHIPS_EVENT, UPDATE_DATA_EVENT } from './events';
-import { generateRandomShips } from "./helpers";
+import { CHANGE_CELLS_EVENT, PLAY_EVENT, UPDATE_DATA_EVENT } from './events';
+import { generateRandomCells } from "./helpers";
 
 export default function useGame(playerName: any) {
   const [data, setData] = useState<Data>();
   const socketRef = useRef<any>();
 
-  const randomizeShips = () => {
-    const ships = generateRandomShips(boardSize - 1, shipScheme);
-    sendEvent(CHANGE_SHIPS_EVENT, ships);
+  const play = (target: string, x: number, y: number) => {
+    sendEvent(PLAY_EVENT, { target, x, y });
+  };
+
+  const randomizeCells = () => {
+    const cells = generateRandomCells(boardSize - 1, shipScheme);
+    sendEvent(CHANGE_CELLS_EVENT, cells);
   }
 
-  const getMyShips = () => {
-    return data?.users?.find(r => r.id === socketRef.current.id)?.ships;
+  const getCells = (userId: string | undefined, hide: boolean = false) => {
+    if (!userId) { return []; }
+    const cells = data?.users?.find(r => r.id === userId)?.cells;
+    if (hide) {
+      return cells?.map(r => {
+        r.hide = true;
+        return r;
+      });
+    }
+    return cells;
   }
 
   const addListeners = () => {
@@ -30,9 +42,9 @@ export default function useGame(playerName: any) {
         query: { name: playerName }
       });
 
-      socketRef.current.on("connect", () => {
-        console.log(`connected with id: ${socketRef.current.id}`);
-      });
+      // socketRef.current.on("connect", () => {
+      //   console.log(`connected with id: ${socketRef.current.id}`);
+      // });
 
       addListeners();
 
@@ -57,8 +69,9 @@ export default function useGame(playerName: any) {
 
   return {
     data,
-    boardSize,
-    randomizeShips,
-    getMyShips,
+    randomizeCells,
+    getCells,
+    userId: socketRef?.current?.id,
+    play,
   };
 }      

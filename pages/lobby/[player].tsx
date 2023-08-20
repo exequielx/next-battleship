@@ -29,10 +29,10 @@ export default function Lobby() {
                         }
                     </ul>
                 </div>
-                <button onClick={game.randomizeShips}>Random</button>
+                <button onClick={game.randomizeCells}>Random</button>
                 <button onClick={startGame}>Start Game</button>
 
-                <Board size={game.boardSize} ships={game.getMyShips()} />
+                <Board ships={game.getShips(game.userId)} />
 
             </div>
         </Layout>

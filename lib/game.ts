@@ -1,5 +1,5 @@
-import { generateRandomShips } from "./helpers";
-import { Data, Ship, boardSize, shipScheme } from "./types";
+import { generateRandomCells } from "./helpers";
+import { Cell, Data, boardSize, shipScheme } from "./types";
 
 export const data: Data = {
     users: [],
@@ -17,7 +17,7 @@ export const updateUser = async (id: string, username: string) => {
         data.users.push({
             id,
             name: username,
-            ships: generateRandomShips(boardSize - 1, shipScheme),
+            cells: generateRandomCells(boardSize - 1, shipScheme),
         });
     }
 }
@@ -26,10 +26,25 @@ export const removeUser = (id: string) => {
     data.users = data.users.filter(r => r.id !== id);
 }
 
-export const changeShips = (userId: string, ships: Ship[]) => {
+export const changeShips = (userId: string, cells: Cell[]) => {
     data.users = data.users.map(r => {
         if (userId === r.id) {
-            r.ships = ships;
+            r.cells = cells;
+        }
+        return r;
+    });
+}
+
+export const doPlay = (target: string, x: number, y: number) => {
+    data.users = data.users.map(r => {
+        if (target === r.id) {
+            r.cells = r.cells?.map(cell => {
+                if (cell.x === x && cell.y === y) {
+                    cell.exploded = true;
+                    cell.hide = false;
+                }
+                return cell;
+            });
         }
         return r;
     });

@@ -1,23 +1,23 @@
-export const generateRandomShips = (coordMaxSize: number, shipSizes: number[]) => {
-    const ships: any = [];
+import { Cell, boardSize } from "./types";
 
+export const generateRandomCells = (coordMaxSize: number, shipSizes: number[]) => {
     const getRandomNumber = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
 
     const generateShipCoordinates = (size: number, prevCoordinates: any[]): any => {
         const direction = getRandomNumber(0, 1);
-        const coordinates: any[] = [];
+        const coordinates = [];
 
         if (direction === 0) {
             const startX = getRandomNumber(0, coordMaxSize - size);
             const startY = getRandomNumber(0, coordMaxSize);
             for (let i = 0; i < size; i++) {
-                coordinates.push({ x: startX + i, y: startY, exploded: false });
+                coordinates.push({ x: startX + i, y: startY });
             }
         } else {
             const startX = getRandomNumber(0, coordMaxSize);
             const startY = getRandomNumber(0, coordMaxSize - size);
             for (let i = 0; i < size; i++) {
-                coordinates.push({ x: startX, y: startY + i, exploded: false });
+                coordinates.push({ x: startX, y: startY + i });
             }
         }
         if (coordinates.some(r => prevCoordinates.includes(`${r.x}${r.y}`))) {
@@ -25,6 +25,9 @@ export const generateRandomShips = (coordMaxSize: number, shipSizes: number[]) =
         }
         return coordinates;
     };
+
+    const board: Cell[] = [];
+    const ships: any = [];
     for (let i = 1; i <= shipSizes.length; i++) {
         const size = shipSizes[i];
         const availableColors = colorOptions.filter(color => !ships.some((ship: any) => ship.color === color));
@@ -33,7 +36,31 @@ export const generateRandomShips = (coordMaxSize: number, shipSizes: number[]) =
         const coordinates = generateShipCoordinates(size, prevCoords);
         ships.push({ id: i, color, coordinates });
     }
-    return ships;
+
+    for (let x = 0; x < boardSize; x++) {
+        for (let y = 0; y < boardSize; y++) {
+            let obj: Cell = {
+                id: x + y,
+                hasShip: false,
+                exploded: false,
+                hide: false,
+                x,
+                y,
+            };
+            ships.forEach((ship: any) => {
+                if (!ship?.coordinates) {
+                    console.log(ship)
+                }
+                ship.coordinates.forEach((coord: any) => {
+                    if (coord.x === x && coord.y === y) {
+                        obj = { ...obj, hasShip: true, color: ship.color, };
+                    }
+                });
+            });
+            board.push(obj);
+        }
+    }
+    return board;
 };
 
 const colorOptions = [

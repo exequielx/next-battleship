@@ -1,19 +1,17 @@
-import { Ship } from '@/lib/types';
+import { Cell as cCell, boardSize } from '@/lib/types';
 import Cell from './cell';
 
-export default function Board({ size, cellSize = 40, ships }: { size: number, cellSize?: number, ships?: Ship[] }) {
-    const board = Array(size).fill('').map(r => Array(size).fill(''));
-    const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N'];
+export default function Board({ cellSize = 40, cells, onCellClick = () => { } }: { cellSize?: number, cells?: cCell[], onCellClick?: any }) {
+    const board = Array(boardSize).fill('').map(r => Array(boardSize).fill(''));
+    const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 
     const drawCell = (x: number, y: number) => {
-        let ret: any = <Cell />;
-        if (ships) {
-            ships.forEach(ship => {
-                ship.coordinates.forEach(shipPart => {
-                    if (shipPart.x === x && shipPart.y === y) {
-                        ret = <Cell id={`${shipPart.x}${shipPart.y}`} color={ship?.color} exploded={shipPart?.exploded} />
-                    }
-                });
+        let ret: any = <Cell x={x} y={y} onCellClick={onCellClick} />;
+        if (cells) {
+            cells.forEach(cell => {
+                if (cell.x === x && cell.y === y) {
+                    ret = <Cell {...cell} onCellClick={onCellClick} />
+                }
             });
         }
         return ret;

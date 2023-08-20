@@ -5,19 +5,17 @@ export interface User {
     id: string;
     name: string;
     picture?: string;
-    ships?: Ship[];
+    cells?: Cell[];
 }
 
-export interface Ship {
+export interface Cell {
     id: number;
-    coordinates: Coordinate[],
-    color: string,
-}
-
-export interface Coordinate {
-    x: number,
-    y: number,
+    x?: number,
+    y?: number,
+    hasShip: boolean,
     exploded: boolean,
+    hide: boolean,
+    color?: string,
 }
 
 export interface Data {
