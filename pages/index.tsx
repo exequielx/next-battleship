@@ -5,10 +5,12 @@ import styles from '@/styles/home.module.css';
 
 export default function Home() {
    const router = useRouter()
-   const [playerName, setPlayerName] = useState(String(Math.random()));
+   const [playerName, setPlayerName] = useState<string | null>(null);
 
    const onChangeName = (event: FormEvent<HTMLInputElement>) => {
-      setPlayerName(event.currentTarget.value);
+      if (event.currentTarget.value) {
+         setPlayerName(event.currentTarget.value);
+      }
    };
 
    const onLoginClick = () => {
@@ -22,12 +24,12 @@ export default function Home() {
             <div>
                <input
                   type="text"
-                  placeholder="Player"
-                  value={playerName}
+                  placeholder="Nombre"
+                  value={playerName ?? ''}
                   onChange={onChangeName}
                   className={styles.textInputField}
                />
-               <button onClick={onLoginClick}>Login</button>
+               {playerName && <button onClick={onLoginClick}>Login</button>}
             </div>
          </div>
       </Layout>

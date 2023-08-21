@@ -3,22 +3,27 @@ import Layout from "@/components/layout";
 import useGame from "@/lib/useGame";
 import styles from '@/styles/lobby.module.css';
 import Board from "@/components/board";
+import { useEffect } from 'react';
+import { ADMIN } from '@/lib/types';
 
 export default function Lobby() {
     const router = useRouter();
-    const playerName = router?.query?.player;
+    const playerName: any = router?.query?.player;
     const game = useGame(playerName);
 
-    const startGame = () => {
-        router.push(`/game/${playerName}`);
+    const onStartGame = () => {
+        game.changeGameStatus(true);
     };
 
+    useEffect(() => {
+        if (playerName && game?.connected && game?.data?.playing === true) {
+            router.push(`/game/${playerName}`);
+        }
+    }, [playerName, game?.connected, game?.data?.playing]);
+
     return (
-        <Layout title="LOBBY">
+        <Layout title={`LOBBY de ${playerName}`}>
             <div>
-                <div>
-                    player: {playerName}
-                </div>
                 <div>
                     players:
                     <ul>
@@ -30,10 +35,8 @@ export default function Lobby() {
                     </ul>
                 </div>
                 <button onClick={game.randomizeCells}>Random</button>
-                <button onClick={startGame}>Start Game</button>
-
-                <Board ships={game.getShips(game.userId)} />
-
+                {playerName === ADMIN && <button onClick={onStartGame}>Start Game</button>}
+                <Board cells={game.getCells(playerName)} />
             </div>
         </Layout>
     );

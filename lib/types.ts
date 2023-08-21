@@ -1,4 +1,5 @@
 export const boardSize = 10;
+export const ADMIN = 'moon';
 export const shipScheme = [1, 2, 3, 3, 4, 4, 5];
 
 export interface User {
@@ -22,4 +23,5 @@ export interface Data {
     users: User[],
     playing: boolean,
     winner: boolean,
+    currentTurn: string | null,
 }

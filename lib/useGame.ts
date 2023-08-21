@@ -2,12 +2,17 @@ import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { Data, boardSize, shipScheme } from "./types";
 
-import { CHANGE_CELLS_EVENT, PLAY_EVENT, UPDATE_DATA_EVENT } from './events';
+import { CHANGE_CELLS_EVENT, PLAY_EVENT, CHANGE_GAME_STATUS, UPDATE_DATA_EVENT } from './events';
 import { generateRandomCells } from "./helpers";
 
 export default function useGame(playerName: any) {
   const [data, setData] = useState<Data>();
+  const [connected, setConnected] = useState<boolean>(false);
   const socketRef = useRef<any>();
+
+  const changeGameStatus = (value: boolean) => {
+    sendEvent(CHANGE_GAME_STATUS, value);
+  };
 
   const play = (target: string, x: number, y: number) => {
     sendEvent(PLAY_EVENT, { target, x, y });
@@ -18,9 +23,9 @@ export default function useGame(playerName: any) {
     sendEvent(CHANGE_CELLS_EVENT, cells);
   }
 
-  const getCells = (userId: string | undefined, hide: boolean = false) => {
-    if (!userId) { return []; }
-    const cells = data?.users?.find(r => r.id === userId)?.cells;
+  const getCells = (playerName: string | undefined, hide: boolean = false) => {
+    if (!playerName) { return []; }
+    const cells = data?.users?.find(r => r.name === playerName)?.cells;
     if (hide) {
       return cells?.map(r => {
         r.hide = true;
@@ -42,9 +47,10 @@ export default function useGame(playerName: any) {
         query: { name: playerName }
       });
 
-      // socketRef.current.on("connect", () => {
-      //   console.log(`connected with id: ${socketRef.current.id}`);
-      // });
+      socketRef.current.on("connect", () => {
+        setConnected(true);
+        console.log(`connected with id: ${socketRef.current.id}`);
+      });
 
       addListeners();
 
@@ -71,7 +77,8 @@ export default function useGame(playerName: any) {
     data,
     randomizeCells,
     getCells,
-    userId: socketRef?.current?.id,
     play,
+    changeGameStatus,
+    connected,
   };
 }      
