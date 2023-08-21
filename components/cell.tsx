@@ -1,4 +1,4 @@
-export default function Cell({ x, y, color, exploded, hide, onCellClick, hasShip }: { x?: number, y?: number, color?: string, exploded?: boolean, hide?: boolean, onCellClick: any, hasShip: boolean }) {
+export default function Cell({ x, y, color, exploded, hide, onCellClick, hasShip }: { x?: number, y?: number, color?: string, exploded?: boolean, hide?: boolean, onCellClick: any, hasShip?: boolean }) {
 
     if (hasShip) {
         if (exploded) {
