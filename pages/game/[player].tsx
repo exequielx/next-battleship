@@ -3,7 +3,9 @@ import Layout from "@/components/layout";
 import useGame from "@/lib/useGame";
 import Board from "@/components/board";
 import { useEffect, useState } from 'react';
+import styles from '@/styles/game.module.css';
 import { ADMIN } from '@/lib/types';
+import Players from '@/components/players';
 
 export default function Lobby() {
     const router = useRouter();
@@ -12,10 +14,16 @@ export default function Lobby() {
     const [target, setTarget] = useState<string>();
 
     useEffect(() => {
-        if (playerName && game?.connected && game?.data?.playing === false) {
+        if (game?.data?.playing === false) {
             router.push(`/lobby/${playerName}`);
         }
-    }, [playerName, game?.connected, game?.data?.playing]);
+    }, [game?.data]);
+
+    useEffect(() => {
+        if ((game?.data?.users?.length ?? 0) > 0) {
+            setTarget(game?.data?.users.find(r => r.name !== playerName)?.name);
+        }
+    }, [game?.data]);
 
     const onCellClick = (x: number, y: number) => {
         if (target && game.data?.currentTurn === playerName) {
@@ -28,25 +36,16 @@ export default function Lobby() {
     };
 
     return (
-        <Layout title={`GAME of ${playerName}`}>
+        <Layout title={playerName}>
             <div>
+                <Players users={game?.data?.users?.filter(r => r.name !== playerName) ?? []} onUserClick={setTarget} target={target} />
+                <div className={styles.current}>turno: {game.data?.currentTurn}</div>
                 <div>
-                    other players:
-                    <ul>
-                        {
-                            !game?.data ? <span>loading...</span> : (
-                                game.data.users.filter(r => r.name !== playerName).map(r => <li onClick={() => { setTarget(r.name); }} style={{ color: target === r.name ? 'red' : 'white' }} key={r.id}>{r.name}</li>)
-                            )
-                        }
-                    </ul>
-                    <div>current turn: {game.data?.currentTurn}</div>
-                    {playerName === ADMIN && <button onClick={onStopGame}>Stop Game</button>}
-                </div>
-                <div style={{ position: 'absolute', left: 20, top: 300 }}>
-                    <Board cellSize={23} cells={game.getCells(playerName)} />
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <Board cells={game.getCells(target, true)} onCellClick={onCellClick} />
+                </div>
+                <Board isSmall cells={game.getCells(playerName)} />
+                <div className={styles.actions}>
+                    {playerName === ADMIN && <button onClick={onStopGame}>Stop Game</button>}
                 </div>
             </div>
         </Layout>

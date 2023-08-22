@@ -1,0 +1,14 @@
+.current {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    padding-bottom: 15px;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}

@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content {
+  display: flex;
+  gap: 8px;
+  border: 1px solid white;
+  padding: 50px;
+  justify-content: center;
+  align-items: center;
+  max-width: 400px;
+  border-radius: 20px;
+}

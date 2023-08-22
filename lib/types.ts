@@ -21,7 +21,7 @@ export interface Cell {
 
 export interface Data {
     users: User[],
-    playing: boolean,
+    playing: boolean | undefined,
     winner: boolean,
     currentTurn: string | null,
 }

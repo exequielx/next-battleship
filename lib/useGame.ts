@@ -7,7 +7,6 @@ import { generateRandomCells } from "./helpers";
 
 export default function useGame(playerName: any) {
   const [data, setData] = useState<Data>();
-  const [connected, setConnected] = useState<boolean>(false);
   const socketRef = useRef<any>();
 
   const changeGameStatus = (value: boolean) => {
@@ -48,7 +47,6 @@ export default function useGame(playerName: any) {
       });
 
       socketRef.current.on("connect", () => {
-        setConnected(true);
         console.log(`connected with id: ${socketRef.current.id}`);
       });
 
@@ -79,6 +77,5 @@ export default function useGame(playerName: any) {
     getCells,
     play,
     changeGameStatus,
-    connected,
   };
 }      

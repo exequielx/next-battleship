@@ -5,6 +5,7 @@ import styles from '@/styles/lobby.module.css';
 import Board from "@/components/board";
 import { useEffect } from 'react';
 import { ADMIN } from '@/lib/types';
+import Players from '@/components/players';
 
 export default function Lobby() {
     const router = useRouter();
@@ -16,27 +17,20 @@ export default function Lobby() {
     };
 
     useEffect(() => {
-        if (playerName && game?.connected && game?.data?.playing === true) {
+        if (game?.data?.playing === true) {
             router.push(`/game/${playerName}`);
         }
-    }, [playerName, game?.connected, game?.data?.playing]);
+    }, [game?.data]);
 
     return (
-        <Layout title={`LOBBY de ${playerName}`}>
-            <div>
-                <div>
-                    players:
-                    <ul>
-                        {
-                            !game?.data ? <span>loading...</span> : (
-                                game.data.users.map(r => <li key={r.id}>{r.name}</li>)
-                            )
-                        }
-                    </ul>
-                </div>
-                <button onClick={game.randomizeCells}>Random</button>
-                {playerName === ADMIN && <button onClick={onStartGame}>Start Game</button>}
+        <Layout title="SALA DE ESPERA">
+            <div className={styles.container}>
+                <Players users={game?.data?.users ?? []} />
                 <Board cells={game.getCells(playerName)} />
+                <div className={styles.actions}>
+                    <button onClick={game.randomizeCells}>Random</button>
+                    {playerName === ADMIN && <button onClick={onStartGame}>Start Game</button>}
+                </div>
             </div>
         </Layout>
     );

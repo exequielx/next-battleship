@@ -3,7 +3,7 @@ import { Cell, Data, boardSize, shipScheme } from "./types";
 
 export const data: Data = {
     users: [],
-    playing: false,
+    playing: undefined,
     currentTurn: null,
     winner: false,
 };
